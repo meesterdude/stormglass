@@ -8,12 +8,12 @@ This gem augments the Stormglass API responses to make consuming the API more ac
 
 - Provides weather lookup for address and lat/lng
 - Provides units and descriptions for all forecast types
-- Creates alternative representations of values (such as Celsius and Fahrenheit)
+- Creates alternative representations of values (such as Fahrenheit, or knots)
 - Specify default units and sources, or override at method invocation
 
 For more information, visit [Stormglass API docs](https://docs.stormglass.io/)
 
-*Note: this gem currently only implements the `point` API endpoint*
+*Note: this gem currently only implements the `point` API endpoint. Accepting pull requests!*
 
 # Installation
 
@@ -54,7 +54,7 @@ First, let's query the stormglass API for an address. (this will look up via `Ge
 response = Stormglass.for_address('123 broad street philadelphia pa', hours: 24)
 => #<Stormglass::Response remaining_requests=31, hours=[#<Stormglass::Hour time='2018-12-12 21:00:00 +0000'> , #<Stormglass::Hour time='2018-12-12 22:00:00 +0000'> ...]>
 ```
-The methods we can call are down cased variants of what the API returns. Taken from `stormglass/hour.rb`
+The methods we can call are underscored variants of what the camelCaps API returns. Taken from `stormglass/hour.rb`
 ```
  VALUES = [:air_temperature,:cloud_cover,:current_direction,:current_speed,:gust,:humidity,
             :precipitation,:pressure,:sea_level,:swell_direction,:swell_height,:swell_period,
@@ -68,7 +68,7 @@ response.first.air_temperature
 ```
 we can also call `response.air_temperature` and it will defer to the first hour result.
 
-But what if we don't want the first hour? in addition to calling `response.hours.select{...}`, you can use `#find`
+But what if we don't want the first hour? in addition to calling `response.hours.select{...}`, you can use `#find` with your local timezone and it will convert to UTC for lookup
 ```
 response.find('7AM EST').air_temperature
 => #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius', unit_type='C', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
@@ -95,10 +95,10 @@ response.air_temperature(unit_type: 'F', data_source: 'noaa')
 
 # Details
 There are a few classes involved:
-1 - `Stormglass::Response` represents the result from stormglass, wrapping `hours` and `meta` responses. Calling something like `#air_temperature` on this delegates to `#hours.first`
-2 - `Stormglass::Hour` represents an hour portion of the API response
-3 - `Stormglass::Value` represents a particular forecast value. along with the numeric `value` it also exposes the `description` and `unit` used. It is just a wrapper to the collection of `Stormglass::Subvalue`'s and defers to the preferred/specified subvalue.
-4 - `Stormglass::Subvalue` represents a particular variant of forecast value, such as `air_temperature` in Celsius or in Fahrenheit.
+1. `Stormglass::Response` represents the result from stormglass, wrapping `hours` and `meta` responses. Calling something like `#air_temperature` on this delegates to `#hours.first`
+2. `Stormglass::Hour` represents an hour portion of the API response
+3. `Stormglass::Value` represents a particular forecast value. along with the numeric `value` it also exposes the `description` and `unit` used. It is just a wrapper to the collection of `Stormglass::Subvalue`'s and defers to the preferred/specified one.
+4. `Stormglass::Subvalue` represents a particular variant of forecast value, such as `air_temperature` in Celsius or in Fahrenheit.
 
 For any of the above instances, you can call `#src` to access the raw (usually JSON) data that was passed in to populate it.
 
