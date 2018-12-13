@@ -52,7 +52,8 @@ end
 First, let's query the stormglass API for an address. This will look up via `Geocoder` and then call `Stormglass.for_lat_lng` for us with the first result.
 ```
 response = Stormglass.for_address('123 broad street philadelphia pa', hours: 24)
-=> #<Stormglass::Response remaining_requests=31, hours=[#<Stormglass::Hour time='2018-12-12 21:00:00 +0000'> ...]>
+=> #<Stormglass::Response remaining_requests=31,
+hours=[#<Stormglass::Hour time='2018-12-12 21:00:00 +0000'> ...]>
 ```
 The methods we can call are underscored variants of what the camelCaps API returns. Taken from `stormglass/hour.rb`
 ```
@@ -64,16 +65,17 @@ The methods we can call are underscored variants of what the camelCaps API retur
 Let's see the first hour's air_temperature.
 ```
 response.hours.first.air_temperature
-=> #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius', unit_type='C',
-unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius',
+unit_type='C', unit_types=["C", "F"], data_source='sg',
+data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
 we can also call `response.first.air_temperature` or even `response.air_temperature` and it will defer to the first hour result.
 
 But what if we don't want the first hour? In addition to calling `response.hours.select{...}`, you can use `#find` with your local timezone and it will convert to UTC for lookup
 ```
 response.find('7AM EST').air_temperature
-=> #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius', unit_type='C',
-unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius',
+unit_type='C', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
 we can work with the `response.find('7AM EST').air_temperature.value` directly, or call `to_s`
 
@@ -86,15 +88,15 @@ What if we want air temperature in Fahrenheit instead?
 
 ```
 response.air_temperature(unit_type: 'F')
-=> #<Stormglass::Value value=44.91, unit='F', description='Air temperature as degrees Fahrenheit', unit_type='F',
-unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=44.91, unit='F', description='Air temperature as degrees Fahrenheit',
+unit_type='F', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
 
 Or we can reference a different data source than the default
 ```
 response.air_temperature(unit_type: 'F', data_source: 'noaa')
-=> #<Stormglass::Value value=45.33, unit='F', description='Air temperature as degrees Fahrenheit', unit_type='F',
-unit_types=["C", "F"], data_source='noaa', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=45.33, unit='F', description='Air temperature as degrees Fahrenheit',
+unit_type='F', unit_types=["C", "F"], data_source='noaa', data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
 
 # Structure
@@ -114,9 +116,9 @@ available options `data_sources` and `unit_types` you can reference for alternat
 
 ```
 response.air_temperature(unit_type: 'C')
-=> #<Stormglass::Value value=7.17, unit='C', description='Air temperature as degrees Celsius', unit_type='C',
-unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=7.17, unit='C', description='Air temperature as degrees Celsius',
+unit_type='C', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
 response.air_temperature(unit_type: 'C', data_source: 'wrf')
-=> #<Stormglass::Value value=8.34, unit='C', description='Air temperature as degrees Celsius', unit_type='C',
-unit_types=["C", "F"], data_source='noaa', data_sources=["sg", "dwd", "noaa", "wrf"]>
+=> #<Stormglass::Value value=8.34, unit='C', description='Air temperature as degrees Celsius',
+unit_type='C', unit_types=["C", "F"], data_source='noaa', data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
