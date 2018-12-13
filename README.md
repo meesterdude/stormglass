@@ -7,9 +7,11 @@ Ruby gem for access to the [Stormglass](https://stormglass.io/) Weather forecast
 This gem augments the Stormglass API responses to make consuming the API more accessible for ruby developers.
 
 - Provides weather lookup for address and lat/lng
-- Provides units and descriptions for all forecast types
+- Provides units and descriptions for all forecast types (from API docs)
+- Specify start/end as DateTime
+- specify `hours` to calcuate end offset from start (default 12)
 - Creates alternative representations of values (such as Fahrenheit, or knots)
-- Specify default units and sources, or override at method invocation
+- Specify default units and sources via `Stormglass.configure` block, or override at method invocation
 
 For more information, visit [Stormglass API docs](https://docs.stormglass.io/)
 
@@ -34,7 +36,7 @@ To use Stormglass you'll need to provide an API key, which can be configured a n
 1. Enviroment variable `STORMGLASS_API_KEY`
 2. within a `Stormglass.configure` block (more on that below)
 3. with Rails secret `stormglass_api_key`
-4. at method invocation by passing `key`
+4. at request invocation by passing `key`
 
 # Configuration
 
