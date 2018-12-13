@@ -36,7 +36,7 @@ class Stormglass::Hour
   end
 
   def inspect
-    string = "#<#{self.class.to_s} time='#{time}'> "
+    "#<#{self.class.to_s} time='#{time}'> "
   end
 
   # handler for each VALUES method (such as air_temperature)
