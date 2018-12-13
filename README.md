@@ -77,14 +77,15 @@ response.find('7AM EST').air_temperature
 => #<Stormglass::Value value=44.91, unit='C', description='Air temperature as degrees Celsius',
 unit_type='C', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
 ```
-we can work with the `response.find('7AM EST').air_temperature.value` directly, or call `to_s`
+we can work with the `response.find('7AM EST').air_temperature.value` directly (a Float), or call `to_s` for a pretty string
 
 ```
 response.air_temperature.to_s
 => "4.91 C"
 ```
 
-What if we want air temperature in Fahrenheit instead?
+What if we want air temperature in Fahrenheit instead? No need to whip out the calculator, we've
+got you covered!
 
 ```
 response.air_temperature(unit_type: 'F')
@@ -118,6 +119,7 @@ available options `data_sources` and `unit_types` you can reference for alternat
 response.air_temperature(unit_type: 'C')
 => #<Stormglass::Value value=7.17, unit='C', description='Air temperature as degrees Celsius',
 unit_type='C', unit_types=["C", "F"], data_source='sg', data_sources=["sg", "dwd", "noaa", "wrf"]>
+
 response.air_temperature(unit_type: 'C', data_source: 'wrf')
 => #<Stormglass::Value value=8.34, unit='C', description='Air temperature as degrees Celsius',
 unit_type='C', unit_types=["C", "F"], data_source='noaa', data_sources=["sg", "dwd", "noaa", "wrf"]>
