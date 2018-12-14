@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "stormglass/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "Stormglass"
+  spec.name          = "stormglass"
   spec.version       = Stormglass::VERSION
   spec.authors       = ["Russell Jennings"]
   spec.email         = ["violentpurr@gmail.com"]
