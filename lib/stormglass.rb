@@ -87,7 +87,7 @@ module Stormglass
   # - when passed directly to parameters
   def self.api_key
     key = Stormglass.settings.api_key
-    key ||= Rails.application.secrets[:stormglass_api_key] if Gem.loaded_specs.has_key?('rails')
+    key ||= Rails.application.credentials[:stormglass_api_key] if Gem.loaded_specs.has_key?('rails')
     key
   end
 
